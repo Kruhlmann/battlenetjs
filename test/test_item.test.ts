@@ -17,7 +17,9 @@ const client = new BattleNetClient(oauth_source, namespace);
 jest.mock("../src/net/requests/get", () => {
     return {
         GETHTTPRequest: jest.fn().mockImplementation(() => {
-            return {};
+            return {
+                send: () => undefined,
+            };
         })
     };
 });
@@ -37,6 +39,6 @@ describe("Item API", () => {
     it("gets an item by name", async () => {
         expect(MockedGETHTTPRequest).not.toHaveBeenCalled();
         await client.get_item_by_name("");
-        expect(MockedGETHTTPRequest).toHaveBeenCalledTimes(1);
+        expect(MockedGETHTTPRequest).toHaveBeenCalledTimes(2);
     });
 })
