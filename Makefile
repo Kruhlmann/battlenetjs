@@ -6,6 +6,9 @@ LOCKFILE=pnpm-lock.yaml
 TSC=./node_modules/.bin/tsc
 ESLINT=./node_modules/.bin/eslint_d
 PRETTIER=./node_modules/.bin/prettier
+JEST=./node_modules/.bin/jest
+
+JEST_FLAGS=--coverage
 
 default all: $(TS_SOURCES) Makefile node_modules
 	$(TSC)
@@ -21,4 +24,7 @@ fix: node_modules
 	$(PRETTIER) $(TS_SOURCES) --write
 	$(ESLINT) $(TS_SOURCES) --fix
 
-.PHONY: lint fix
+test:
+	$(JEST) $(JEST_FLAGS)
+
+.PHONY: lint fix test clean

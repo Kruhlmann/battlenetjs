@@ -1,4 +1,6 @@
-export class Logger {
+import { Loggable } from "./loggable";
+
+export class Logger implements Loggable {
     private class_identity: string;
 
     private constructor(class_identity: string) {

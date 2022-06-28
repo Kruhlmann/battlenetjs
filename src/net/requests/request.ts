@@ -12,7 +12,7 @@ export abstract class HTTPRequest<RequestType, ResponseType> {
     protected readonly response_parser: HTTPResponseParser<ResponseType>;
     protected readonly serializer_factory: QuerySerializerFactory;
     protected readonly query: Record<string, unknown>;
-    private readonly logger: Logger;
+    protected readonly logger: Logger;
 
     public constructor(
         options: RequestOptions,
