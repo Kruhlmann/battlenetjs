@@ -5,6 +5,8 @@
     "author": "Andreas Kr\u00fclmann <andreas@kruhlmann.dev>",
     "repository": "git@github.com:kruhlmann/battlenetjs.git",
     "homepage": "git@github.com:kruhlmann/battlenetjs.git",
+    "types": "dist/index.d.ts",
+    "main": "dist/index.js",
     "files": [
         "/dist"
     ],
