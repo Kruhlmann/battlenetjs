@@ -1,6 +1,6 @@
 {
     "name": "@kruhlmann/battlenetjs",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "BattleNet API client",
     "author": "Andreas Kr\u00fclmann <andreas@kruhlmann.dev>",
     "repository": "git@github.com:kruhlmann/battlenetjs.git",
