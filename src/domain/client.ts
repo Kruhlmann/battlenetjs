@@ -1,9 +1,12 @@
 import { BattleNetItem } from "../data/item/item";
+import { BattleNetItemMedia } from "../data/item/media";
 import { BattleNetNamespace } from "../data/namespace/namespace";
+import { BattleNetMediaResolvedItem } from "../data/resolved/media_resolved_item";
 import { ItemNotFoundError } from "../error/item_not_found";
 import { OauthSource } from "./auth/oauth_source";
 import { BattleNet } from "./battlenet";
 import { GetItemRequest } from "./requests/get_item";
+import { GetItemIconRequest } from "./requests/get_item_icon";
 import { SearchItemRequest } from "./requests/search_item";
 
 export class BattleNetClient implements BattleNet {
@@ -17,11 +20,20 @@ export class BattleNetClient implements BattleNet {
         this.locale = locale;
     }
 
-    public async get_item_by_id(item_id: number): Promise<BattleNetItem> {
+    public async get_item_by_id(item_id: number): Promise<BattleNetMediaResolvedItem> {
         const oauth_token = await this.oauth_source.get_token();
-        return new GetItemRequest(item_id, oauth_token, this.namespace, this.locale).send().catch(() => {
-            throw new ItemNotFoundError(`ID: ${item_id}`);
-        });
+        return Promise.all([
+            new GetItemRequest(item_id, oauth_token, this.namespace, this.locale).send().catch(() => {
+                throw new ItemNotFoundError(`ID: ${item_id}`);
+            }),
+            new GetItemIconRequest(item_id, oauth_token, this.namespace, this.locale).send().catch(() => {
+                throw new ItemNotFoundError(`ID: ${item_id}`);
+            }),
+        ]).then((responses: [BattleNetItem, BattleNetItemMedia]) => {
+            const media = responses[1];
+            const item = responses[0];
+            return { ...item, ...{ thumbnail: media.assets[0].value } }
+        })
     }
 
     public async get_item_by_name(item_name: string): Promise<BattleNetItem> {
