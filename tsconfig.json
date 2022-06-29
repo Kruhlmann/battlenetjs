@@ -1,6 +1,10 @@
 {
-    "include": ["src/**/*.ts"],
-    "exclude": ["node_modules"],
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
     "compilerOptions": {
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
@@ -22,18 +26,26 @@
         "outDir": "dist",
         "preserveConstEnums": true,
         "removeComments": true,
+        "declarationMap": true,
         "sourceMap": false,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "lib": ["ESNext"],
+        "lib": [
+            "ESNext"
+        ],
         "target": "ES2020",
         "useDefineForClassFields": true,
         "pretty": false,
         "skipLibCheck": false,
         "skipDefaultLibCheck": true,
-        "types": ["node", "@types/jest"],
-        "typeRoots": ["./src/typings"]
-  }
+        "types": [
+            "node",
+            "@types/jest"
+        ],
+        "typeRoots": [
+            "./src/typings"
+        ]
+    }
 }
