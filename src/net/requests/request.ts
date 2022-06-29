@@ -41,8 +41,12 @@ export abstract class HTTPRequest<RequestType, ResponseType> {
                 });
                 response.on(HTTPEvent.END, () => {
                     const string_response = Buffer.concat(chunks).toString();
-                    const parsed_response = this.response_parser.parse(string_response);
-                    resolve(parsed_response);
+                    try {
+                        const parsed_response = this.response_parser.parse(string_response);
+                        resolve(parsed_response);
+                    } catch (error) {
+                        reject(error);
+                    }
                 });
             });
             this.write_to_request(request_handle);

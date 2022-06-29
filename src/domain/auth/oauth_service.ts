@@ -1,3 +1,4 @@
+import { InvalidBattleNetCredentialsError } from "../../error/invalid_credentials";
 import { Logger } from "../../logger/logger";
 import { OauthGrantRequest } from "../requests/oauth_grant";
 import { OauthSource } from "./oauth_source";
@@ -52,9 +53,12 @@ export class BattleNetOauthService implements OauthSource {
         return new OauthGrantRequest(this.credentials_b64)
             .send()
             .then((response) => {
+                if (response.access_token === undefined) {
+                    throw new InvalidBattleNetCredentialsError();
+                }
                 this.token_expiration_time_ms = Date.now() + response.expires_in * 1000;
                 this.token = response.access_token;
-                this.logger.debug("Assigned new oauth token");
+                this.logger.debug(`Assigned new oauth token '${response.access_token.replace(/./g, "*")}'`);
             })
             .catch((error: Error) => {
                 this.logger.error("Error during new oauth token request");
