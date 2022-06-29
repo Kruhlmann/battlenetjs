@@ -1,5 +1,6 @@
 import { BattleNetItem } from "../data/item/item";
 import { BattleNetNamespace } from "../data/namespace/namespace";
+import { ItemNotFoundError } from "../error/item_not_found";
 import { OauthSource } from "./auth/oauth_source";
 import { BattleNet } from "./battlenet";
 import { GetItemRequest } from "./requests/get_item";
@@ -18,12 +19,18 @@ export class BattleNetClient implements BattleNet {
 
     public async get_item_by_id(item_id: number): Promise<BattleNetItem> {
         const oauth_token = await this.oauth_source.get_token();
-        return new GetItemRequest(item_id, oauth_token, this.namespace, this.locale).send();
+        return new GetItemRequest(item_id, oauth_token, this.namespace, this.locale).send().catch(() => {
+            throw new ItemNotFoundError(`ID: ${item_id}`);
+        });
     }
 
     public async get_item_by_name(item_name: string): Promise<BattleNetItem> {
         const oauth_token = await this.oauth_source.get_token();
-        const item_id = await new SearchItemRequest(item_name, oauth_token, this.namespace, this.locale).send();
+        const item_id = await new SearchItemRequest(item_name, oauth_token, this.namespace, this.locale)
+            .send()
+            .catch(() => {
+                throw new ItemNotFoundError(`Name: ${item_name}`);
+            });
         return this.get_item_by_id(item_id);
     }
 }
